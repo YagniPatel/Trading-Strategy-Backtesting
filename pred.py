@@ -14,9 +14,9 @@ MODEL_PATH = 'model.pkl'
 # Function   :- takes test data from FetchData class 
 # Returns    :- DataFrame containing test data
 def get_test_data():
-    stock_name = "AAPL"
-    start_date = datetime.date(2018, 1, 1)
-    end_date = datetime.date(2019, 1, 1)
+    stock_name = input("Enter Stock Name :---  ")
+    start_date = datetime.date(2015, 1, 1)
+    end_date = datetime.date(2020, 1, 1)
     test = FetchData().execute(stock_name, start_date, end_date)
     return test
 

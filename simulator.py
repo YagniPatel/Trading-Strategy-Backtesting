@@ -18,7 +18,8 @@ def simulator(t):
     # c - count of stock
     m = 10000
     c = 0
-
+    print(f'Default Money = {m}')
+    print("\n")
     # calculating profit or loss according output predicted by ML model
     for i in range(len(t)):
         if (t['pred'][i] > 0):

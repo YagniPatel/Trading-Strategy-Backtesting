@@ -14,9 +14,9 @@ MODEL_PATH = 'model.pkl'
 # Function   :- takes train data from FetchData class 
 # Returns    :- DataFrame containing train data
 def get_train_data():
-    stock_name = "AAPL"
-    start_date = datetime.date(2000, 1, 1)
-    end_date = datetime.date(2018, 1, 1)
+    stock_name = input("Enter Stock Name :---  ")
+    start_date = datetime.date(2001, 1, 1)
+    end_date = datetime.date(2015, 1, 1)
     train = FetchData().execute(stock_name, start_date, end_date, True)
 
     return train
