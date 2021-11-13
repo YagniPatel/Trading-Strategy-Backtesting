@@ -18,6 +18,10 @@ def simulator(t, m):
     # c - count of stock
     b = []
     s = []
+    money = []
+    count = []
+    profit = []
+    p = 0
     om = m
     c = 0
     d = {}
@@ -38,10 +42,10 @@ def simulator(t, m):
                 c = c - 1
             b.append(0)
             s.append(1)
-
-        t['m'][i]=m
-        t['c'][i]=c
-        t['pr'][i]=c*t["Open"][i] + m -10000
+        p= c*t["Open"][-1] + m - 10000
+        money.append(m)
+        count.append(c)
+        profit.append(p)
 
     d["Money"] = m
     d["Stock"] = c
@@ -50,6 +54,9 @@ def simulator(t, m):
 
     t["buy"] = b
     t["sell"] = s
+    t['m'] = money
+    t['c'] = count
+    t['pr'] = profit
     print(f'Money = {m}')
     print(f'Stock = {c}')
     print(f'Stock Price = {t["Open"][-1]}')
@@ -83,9 +90,9 @@ def graph(t):
     plt.ylabel('profit')
 
     f6 = plt.figure(figsize=(25, 25))
-    plt.plot(t['Adj Close'], label='Adj Close',color = 'oragne', linewidth=2)
-    plt.scatter(t.index, t['buy signal'], label='Buy', marker='^' , color = 'blue')
-    plt.scatter(t.index, t['sell signal'], label='sell', marker='v' , color = 'green')
+    plt.plot(t['Adj Close'], label='Adj Close', color = 'orange', linewidth=2)
+    plt.scatter(t.index, t['buy'], label='Buy', marker='^' , color = 'blue')
+    plt.scatter(t.index, t['sell'], label='sell', marker='v' , color = 'green')
     plt.xlabel('price')
     plt.ylabel('index')
     plt.legend(loc='upper left')
