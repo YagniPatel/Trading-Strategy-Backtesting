@@ -16,8 +16,7 @@ def get_pred(sn, s, e):
 def simulator(t, m):
     # m - amount which user want to invest
     # c - count of stock
-    b = []
-    s = []
+
     money = []
     count = []
     profit = []
@@ -33,15 +32,12 @@ def simulator(t, m):
             if m > t['Close'][i]:
                 m = m - t['Close'][i]
                 c = c + 1
-            b.append(1)
-            s.append(0)
 
         else:
             if c > 0:
                 m = m + t['Close'][i]
                 c = c - 1
-            b.append(0)
-            s.append(1)
+
         p= c*t["Open"][-1] + m - 10000
         money.append(m)
         count.append(c)
@@ -52,8 +48,6 @@ def simulator(t, m):
     d["Stock Price"] = t["Open"][-1]
     d["Profit"] = c*t["Open"][-1] + m - om
 
-    t["buy"] = b
-    t["sell"] = s
     t['m'] = money
     t['c'] = count
     t['pr'] = profit
@@ -88,6 +82,12 @@ def graph(t):
     f5 = plt.figure(figsize = (12,5))
     plt.plot(t['pr'])
     plt.ylabel('profit')
+
+    for x in t['Pred']:
+        if x==0:
+            t['sell']=t["Adj Close"]
+        else:
+            t['buy']=t["Adj Close"]
 
     f6 = plt.figure(figsize=(25, 25))
     plt.plot(t['Adj Close'], label='Adj Close', color = 'orange', linewidth=2)
