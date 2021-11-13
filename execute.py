@@ -12,9 +12,9 @@ def execute(m, sn, s, e, mn):
 
 
     call(model, sn)
-    d = execute_s(sn, s, e, mn)
+    d, f1, f2, f3, f4, f5, f6 = execute_s(sn, s, e, mn)
     print(d)
-    return d
+    return d, f1, f2, f3, f4, f5, f6
 
 
 if __name__ == '__main__':

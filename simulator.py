@@ -16,6 +16,8 @@ def get_pred(sn, s, e):
 def simulator(t, m):
     # m - amount which user want to invest
     # c - count of stock
+    b = []
+    s = []
     om = m
     c = 0
     d = {}
@@ -27,37 +29,76 @@ def simulator(t, m):
             if m > t['Close'][i]:
                 m = m - t['Close'][i]
                 c = c + 1
+            b.append(1)
+            s.append(0)
 
         else:
             if c > 0:
                 m = m + t['Close'][i]
                 c = c - 1
+            b.append(0)
+            s.append(1)
+
+        t['m'][i]=m
+        t['c'][i]=c
+        t['pr'][i]=c*t["Open"][i] + m -10000
 
     d["Money"] = m
     d["Stock"] = c
     d["Stock Price"] = t["Open"][-1]
     d["Profit"] = c*t["Open"][-1] + m - om
 
+    t["buy"] = b
+    t["sell"] = s
     print(f'Money = {m}')
     print(f'Stock = {c}')
     print(f'Stock Price = {t["Open"][-1]}')
 
     print(f'Profit = {c*t["Open"][-1] + m - 10000}')
 
-    return d
+    return d, t
 
-# def graph(t):
-#     plt.figure(figsize = (12,5))
-#     t['Adj Close'].plot()
-#     plt.savefig("output.jpg")
+def graph(t):
+    f1 = plt.figure(figsize = (12, 5))
+    plt.plot(t['Adj Close'])
+    plt.ylabel('closing price')
+
+    f2 = plt.figure(figsize = (12,5))
+    plt.plot(t['Adj Close'])
+    plt.plot(t['Open'])
+    plt.ylabel('opening/closing price')
+    plt.legend(loc='upper left')
+
+
+    f3 = plt.figure(figsize = (12,5))
+    plt.plot(t['m'])
+    plt.ylabel('money in account')
+
+    f4 = plt.figure(figsize = (12,5))
+    plt.plot(t['c'])
+    plt.ylabel('stock count')
+
+    f5 = plt.figure(figsize = (12,5))
+    plt.plot(t['pr'])
+    plt.ylabel('profit')
+
+    f6 = plt.figure(figsize=(25, 25))
+    plt.plot(t['Adj Close'], label='Adj Close',color = 'oragne', linewidth=2)
+    plt.scatter(t.index, t['buy signal'], label='Buy', marker='^' , color = 'blue')
+    plt.scatter(t.index, t['sell signal'], label='sell', marker='v' , color = 'green')
+    plt.xlabel('price')
+    plt.ylabel('index')
+    plt.legend(loc='upper left')
+
+    return f1, f2, f3, f4, f5, f6
 
 # Function   :- fetches output predicted by ML model and give it to simulator()
 def execute_s(sn, s, e, m):
     df = get_pred(sn, s, e)
-    d = simulator(df, m)
-    #graph(df)
+    d, t = simulator(df, m)
+    f1, f2, f3, f4, f5, f6 = graph(t)
 
-    return d
+    return d, f1, f2, f3, f4, f5, f6
 
 if __name__ == '__main__':
     start_date = datetime.date(2015, 1, 1)
