@@ -3,6 +3,7 @@
 
 # Importing required modules
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 from pred import *
 
@@ -38,7 +39,7 @@ def simulator(t, m):
                 m = m + t['Close'][i]
                 c = c - 1
 
-        p= c*t["Open"][-1] + m - 10000
+        p= c*t["Open"][-1] + m - om
         money.append(m)
         count.append(c)
         profit.append(p)
@@ -55,7 +56,7 @@ def simulator(t, m):
     print(f'Stock = {c}')
     print(f'Stock Price = {t["Open"][-1]}')
 
-    print(f'Profit = {c*t["Open"][-1] + m - 10000}')
+    print(f'Profit = {c*t["Open"][-1] + m - om}')
 
     return d, t
 
@@ -83,11 +84,14 @@ def graph(t):
     plt.plot(t['pr'])
     plt.ylabel('profit')
 
-    for x in t['Pred']:
-        if x==0:
-            t['sell']=t["Adj Close"]
+    t['sell']=np.nan
+    t['buy']=np.nan
+
+    for x in range(len(t['pred'])):
+        if t['pred'][x]==0:
+            t['sell'][x]=t["Adj Close"][x]
         else:
-            t['buy']=t["Adj Close"]
+            t['buy'][x]=t["Adj Close"][x]
 
     f6 = plt.figure(figsize=(25, 25))
     plt.plot(t['Adj Close'], label='Adj Close', color = 'orange', linewidth=2)
@@ -96,6 +100,8 @@ def graph(t):
     plt.xlabel('price')
     plt.ylabel('index')
     plt.legend(loc='upper left')
+    plt.savefig("output.jpg")
+
 
     return f1, f2, f3, f4, f5, f6
 
