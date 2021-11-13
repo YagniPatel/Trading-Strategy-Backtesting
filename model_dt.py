@@ -6,7 +6,7 @@ import numpy as np
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import confusion_matrix
 
-class Model:
+class ModelDT:
     # Function   :- initializing KNN model object and two variables minS and maxS 
     def __init__(self):
         self.__knn = DecisionTreeClassifier()

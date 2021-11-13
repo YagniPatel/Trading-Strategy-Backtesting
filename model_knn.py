@@ -6,7 +6,7 @@ import numpy as np
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import confusion_matrix
 
-class Model:
+class ModelKNN:
     # Function   :- initializing KNN model object and two variables minS and maxS 
     def __init__(self):
         self.__knn = KNeighborsClassifier(n_neighbors=50)

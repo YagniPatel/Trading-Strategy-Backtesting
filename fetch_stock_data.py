@@ -22,6 +22,20 @@ class FetchData():
         t = yf.download(stock_name, start_date, end_date)
         return t
 
+    def __RSI(self, series, period):
+        delta = series.diff().dropna()
+        u = delta * 0
+        d = u.copy()
+        u[delta > 0] = delta[delta > 0]
+        d[delta < 0] = -delta[delta < 0]
+        u[u.index[period-1]] = np.mean( u[:period] ) #first value is sum of avg gains
+        u = u.drop(u.index[:(period-1)])
+        d[d.index[period-1]] = np.mean( d[:period] ) #first value is sum of avg losses
+        d = d.drop(d.index[:(period-1)])
+        rs = pd.DataFrame.ewm(u, com=period-1, adjust=False).mean() / \
+            pd.DataFrame.ewm(d, com=period-1, adjust=False).mean()
+        return 100 - 100 / (1 + rs)
+
     # Function   :- adds features to data
     #
     # Parameters :- isTrain - True if fetching train data for ML model
@@ -37,7 +51,30 @@ class FetchData():
         self.__df['SMA60'] = self.__df['Adj Close'].rolling(window=60).mean()
         self.__df['SMA90'] = self.__df['Adj Close'].rolling(window=90).mean()
         self.__df['SMA180'] = self.__df['Adj Close'].rolling(window=180).mean()
-        
+
+        self.__df['SMA6030'] = self.__df['SMA60'] - self.__df['SMA30']
+        self.__df['SMA9030'] = self.__df['SMA90'] - self.__df['SMA30']
+        self.__df['SMA18030'] = self.__df['SMA180'] - self.__df['SMA30']
+        self.__df['SMA9060'] = self.__df['SMA90'] - self.__df['SMA60']
+        self.__df['SMA18030'] = self.__df['SMA180'] - self.__df['SMA60']
+        self.__df['SMA18090'] = self.__df['SMA180'] - self.__df['SMA90']
+
+        self.__df['EMA10'] = self.__df['Adj Close'].ewm(span=10, adjust=False).mean()
+        self.__df['EMA30'] = self.__df['Adj Close'].ewm(span=30, adjust=False).mean()
+        self.__df['EMA60'] = self.__df['Adj Close'].ewm(span=60, adjust=False).mean()
+        self.__df['EMA90'] = self.__df['Adj Close'].ewm(span=90, adjust=False).mean()
+        self.__df['EMA120'] = self.__df['Adj Close'].ewm(span=120, adjust=False).mean()
+        self.__df['EMA150'] = self.__df['Adj Close'].ewm(span=150, adjust=False).mean()
+        self.__df['EMA180'] = self.__df['Adj Close'].ewm(span=180, adjust=False).mean()
+
+        self.__df['rsi14'] = self.__RSI(self.__df['Adj Close'], 14)
+        self.__df['rsi30'] = self.__RSI(self.__df['Adj Close'], 30)
+        self.__df['rsi60'] = self.__RSI(self.__df['Adj Close'], 60)
+        self.__df['rsi90'] = self.__RSI(self.__df['Adj Close'], 90)
+        self.__df['rsi120'] = self.__RSI(self.__df['Adj Close'], 120)
+        self.__df['rsi150'] = self.__RSI(self.__df['Adj Close'], 150)
+        self.__df['rsi180'] = self.__RSI(self.__df['Adj Close'], 180)
+
         # droping NULL values in DataFrame
         self.__df.dropna(inplace = True)
 
