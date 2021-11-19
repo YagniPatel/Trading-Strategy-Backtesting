@@ -1,15 +1,15 @@
-# Preprocessing data and traing DT ML model using train data and predicting output for test data
+# Preprocessing data and traing SGD ML model using train data and predicting output for test data
 
 # Importing required modules
 import pandas as pd
 import numpy as np
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.linear_model import SGDClassifier
 from sklearn.metrics import confusion_matrix
 
-class ModelDT:
-    # Function   :- initializing DT model object and two variables minS and maxS 
+class ModelSGD:
+    # Function   :- initializing SGD model object and two variables minS and maxS 
     def __init__(self):
-        self.__dt = DecisionTreeClassifier()
+        self.__sgd = SGDClassifier()
         self.__minS = 0
         self.__maxS = 0
     
@@ -38,7 +38,7 @@ class ModelDT:
         X = (X - self.__minS)/(self.__maxS-self.__minS)
         return X
 
-    # Function   :- trains DT model
+    # Function   :- trains SGD model
     #
     # Parameters :- X - DataFrame containing all the features
     #               y - Series containing target
@@ -46,15 +46,15 @@ class ModelDT:
         # TODO preprocessing
         X = self.__preprocess(X, isTrain=True)
         # TODO train model
-        self.__dt = self.__dt.fit(X, y)
+        self.__sgd = self.__sgd.fit(X, y)
 
-        y_pred = self.__dt.predict(X)
+        y_pred = self.__sgd.predict(X)
 
         # Printing confusion matrix and accuracy of model
         print("Confusion matrix :-- \n", confusion_matrix(y, y_pred))
-        print("Score :-- ", self.__dt.score(X, y))
+        print("Score :-- ", self.__sgd.score(X, y))
 
-    # Function   :- predicts output for test data using trained DT model
+    # Function   :- predicts output for test data using trained SGD model
     # Parameters :- X - DataFrame containing all the features
     # Returns    :- numpy array containing predicted output by model
     def pred(self, X:pd.DataFrame):
@@ -62,4 +62,4 @@ class ModelDT:
         X = self.__preprocess(X, isTrain=False)
 
         # TODO return predictions using model
-        return self.__dt.predict(X)
+        return self.__sgd.predict(X)

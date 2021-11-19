@@ -1,6 +1,6 @@
-from model_dt import ModelDT
 from model_knn import ModelKNN
 from model_dt import ModelDT
+from model_sgd import ModelSGD
 from train import *
 from simulator import *
 
@@ -9,6 +9,8 @@ def execute(m, sn, s, e, mn):
         model = ModelKNN()
     elif m=='DT':
         model = ModelDT()
+    elif m=='SGD':
+        model = ModelSGD()
 
 
     call(model, sn)
@@ -20,5 +22,5 @@ def execute(m, sn, s, e, mn):
 if __name__ == '__main__':
     start_date = datetime.date(2015, 1, 1)
     end_date = datetime.date(2020, 1, 1)
-    sn = "AAPL"
-    d = execute('KNN', sn, start_date, end_date, 10000)
+    sn = "GOOGL"
+    d = execute('SGD', sn, start_date, end_date, 10000)
